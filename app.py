@@ -1,20 +1,23 @@
 import email
-from flask import Flask, jsonify
+from flask import Flask
+#routes is in different package
+from routes.routes import welcome
 from flask_sqlalchemy import SQLAlchemy
 
 
-#Tell python we r creating flask web app
+# Tell python we r creating flask web app
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] ='mysql://root:Bali!997@localhost/simulation_data'
 #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False'
 
+#registers blueprint or informs the route
+app.register_blueprint(welcome)
 
+# instanciate sqlalchemy
 db = SQLAlchemy(app)
-#db = SQLAlchemy(app)
 
-
-#creates table for the schema
+# creates a table for the schema
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -24,15 +27,9 @@ class User(db.Model):
       self.username=username
       self.email=email
 
-  
 
 
 
-# mapping method/function to http request
-@app.route("/get", methods =['GET'])
-def hello_world():
-    return jsonify({"hello":"flask!"})
-
-
+# run the app in dev mode
 if __name__ == "__main__":
     app.run(debug=True)
