@@ -1,7 +1,6 @@
-import email
-from sys import prefix
 from flask import Flask, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import false
 #routes is in different package
 from routes.department_route import department
 from routes.service_route import service
@@ -27,17 +26,55 @@ app.register_blueprint(digitalise , url_prefix="/departments/services/simulation
 # instanciate sqlalchemy
 db = SQLAlchemy(app)
 
-# creates a table for the schema
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+class Department(db.Model):
+    id = db.Column(db.Integer, primary_key=True, unique= True, nullable = False)
+    department_name = db.Column(db.String(200),nullable = False )
+    #back ref for services
+    services = db.relationship('Service', backref='department')
+
+
+class Service(db.Model):
+  id = db.Column(db.Integer, primary_key=True, unique= True, nullable = False)
+  service_name = db.Column(db.String(200),  nullable = False)
+  #defining foreign key
+  department_id= db.Column(db.Integer, db.ForeignKey('department.id'))
+  #back ref for qsimulations
+  qsimulations = db.relationship('QSimulation', backref='service')
+
+
+
+class Simulation(db.Model):
+  id = db.Column(db.Integer, primary_key=True, nullable = False)
+  warm_up_duration = db.Column(db.Float, nullable = False)
+  total_duration = db.Column(db.Float,  nullable = False )
+  patient_interval_time = db.Column(db.Float, nullable = False)
+  approx_triage_time= db.Column(db.Float, nullable = False)
+  approx_booking_time= db.Column(db.Float, nullable = False)
+  receptionist_no = db.Column(db.Integer, nullable = False)
+  triage_nurse_no = db.Column(db.Integer, nullable = False)
+  booking_iot_no = db.Column(db.Integer, nullable = True)
+  triage_iot_no = db.Column(db.Integer, nullable = True)
+  #defining foreign key
+  service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+  #back ref for qsimulationruns
+  qsimulation_runs = db.relationship('SimulationRun', backref='qsimulation')
+
+
+
+class SimulationRun(db.Model):
+   id = db.Column(db.Integer, primary_key=True,  nullable = False)
+   run_no = db.Column(db.Integer, nullable = False)
+   patient_no = db.Column(db.Integer, nullable = False)
+   time_spent_in_booking_q = db.Column(db.Float)
+   time_spent_while_booking = db.Column(db.Float)
+   time_spent_in_triage_q= db.Column(db.Float)
+   time_spent_while_triaging = db.Column(db.Float)
+   total_time_spent = db.Column(db.Float)
+   #defining foreign key
+   qsimulation_id= db.Column(db.Integer, db.ForeignKey('simulation.id'))
     
-    def __init__(self, username):
-      self.username=username
-      self.email=email
-
-
+#from app import db
+#db.create_all()
 
 
 # run the app in dev mode
