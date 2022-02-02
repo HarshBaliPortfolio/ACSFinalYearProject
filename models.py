@@ -61,8 +61,9 @@ class Simulation(db.Model):
   #backref for Q_Simulation
   q_simulation = db.relationship('QueSimulation', backref='simulation')
   
-  def __init__(self,simulation_name):
+  def __init__(self,simulation_name, service_id):
     self.simulation_name= simulation_name
+    self.service_id =service_id
 
 #Schema for serialisation and desirialisation
 class SimulationSchema(ma.Schema):
@@ -97,7 +98,7 @@ class QueSimulation(db.Model):
 
   def __init__(self, warm_up_duration,total_duration,
   patient_interval_time,approx_triage_time,approx_booking_time,
-   receptionist_no, triage_nurse_no,  booking_iot_no, triage_iot_no):
+  receptionist_no, triage_nurse_no,  booking_iot_no, triage_iot_no, simulation_id):
 
    self.warm_up_duration= warm_up_duration
    self.total_duration =total_duration
@@ -108,6 +109,8 @@ class QueSimulation(db.Model):
    self.triage_nurse_no =triage_nurse_no
    self.booking_iot_no=booking_iot_no
    self.triage_iot_no=triage_iot_no
+   self.simulation_id=simulation_id
+
 
 #Schema for serialisation and desirialisation
 class QueSimulationSchema(ma.Schema):
@@ -140,7 +143,7 @@ class QueSimulationRun(db.Model):
    
    def __init__(self,run_no,patient_no,time_spent_in_booking_q,  
    time_spent_while_booking,time_spent_in_triage_q, 
-   time_spent_while_triaging,total_time_spent  ):
+   time_spent_while_triaging,total_time_spent, qsimulation_id):
     self.run_no =run_no
     self.patient_no=patient_no
     self.time_spent_in_booking_q =time_spent_in_booking_q
@@ -148,6 +151,7 @@ class QueSimulationRun(db.Model):
     self.time_spent_in_triage_q =time_spent_in_triage_q
     self.time_spent_while_triaging=time_spent_while_triaging
     self.total_time_spent=total_time_spent
+    self.qsimulation_id=qsimulation_id
     
 #Schema for serialisation and desirialisation
 class QueSimulationRunSchema(ma.Schema):
