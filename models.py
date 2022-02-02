@@ -81,43 +81,49 @@ simulations_schema = SimulationSchema(many= True)
 class QueSimulation(db.Model):
   #Columns
   id = db.Column(db.Integer, primary_key=True, nullable = False)
-  warm_up_duration = db.Column(db.Float, nullable = False)
-  total_duration = db.Column(db.Float,  nullable = False )
-  patient_interval_time = db.Column(db.Float, nullable = False)
-  approx_triage_time= db.Column(db.Float, nullable = False)
-  approx_booking_time= db.Column(db.Float, nullable = False)
+  warm_up_duration = db.Column(db.Numeric, nullable = False)
+  total_duration = db.Column(db.Numeric,  nullable = False )
+  patient_interval_time = db.Column(db.Numeric, nullable = False)
   receptionist_no = db.Column(db.Integer, nullable = False)
+  receptionist_booking_time= db.Column(db.Numeric, nullable = False)
   triage_nurse_no = db.Column(db.Integer, nullable = False)
-  booking_iot_no = db.Column(db.Integer, nullable = True)
-  triage_iot_no = db.Column(db.Integer, nullable = True)
+  nurse_triage_time= db.Column(db.Numeric, nullable = False)
+  booking_iot_no = db.Column(db.Integer, nullable = False)
+  iot_booking_time= db.Column(db.Numeric, nullable = False)
+  triage_iot_no = db.Column(db.Integer, nullable = False)
+  iot_triage_time= db.Column(db.Numeric, nullable = False)
+  total_runs_no = db.Column(db.Integer, nullable = False)
 
   #Foreign key
   simulation_id = db.Column(db.Integer, db.ForeignKey('simulation.id'))
   #backref for QSimulationrun
   q_simulation_run= db.relationship('QueSimulationRun', backref='que_simulation.id')
 
-  def __init__(self, warm_up_duration,total_duration,
-  patient_interval_time,approx_triage_time,approx_booking_time,
-  receptionist_no, triage_nurse_no,  booking_iot_no, triage_iot_no, simulation_id):
+  def __init__(self, warm_up_duration,total_duration,total_runs_no,
+  patient_interval_time,receptionist_no, receptionist_booking_time, triage_nurse_no, nurse_triage_time,
+    booking_iot_no, iot_booking_time, triage_iot_no,  iot_triage_time, simulation_id):
 
    self.warm_up_duration= warm_up_duration
    self.total_duration =total_duration
+   self.total_runs_no=total_runs_no
    self.patient_interval_time =patient_interval_time
-   self.approx_triage_time= approx_triage_time
-   self.approx_booking_time =approx_booking_time
    self.receptionist_no =receptionist_no
+   self.receptionist_booking_time =receptionist_booking_time
    self.triage_nurse_no =triage_nurse_no
+   self.nurse_triage_time= nurse_triage_time
    self.booking_iot_no=booking_iot_no
+   self.iot_booking_time=iot_booking_time
    self.triage_iot_no=triage_iot_no
+   self.iot_triage_time=iot_triage_time
    self.simulation_id=simulation_id
 
 
 #Schema for serialisation and desirialisation
 class QueSimulationSchema(ma.Schema):
   class Meta:
-    fields = ("id", "warm_up_duration", "total_duration", "patient_interval_time", 
-    "approx_triage_time", "approx_booking_time","receptionist_no","triage_nurse_no",
-    "booking_iot_no", "triage_iot_no", "simulation_id")
+    fields = ("id", "warm_up_duration","total_duration","total_runs_no",
+    "patient_interval_time","receptionist_no", "receptionist_booking_time", "triage_nurse_no", "nurse_triage_time",
+    "booking_iot_no", "iot_booking_time", "triage_iot_no",  "iot_triage_time", "simulation_id")
 
 #Schema objects for routes
 que_simulation_schema= QueSimulationSchema()
@@ -133,11 +139,11 @@ class QueSimulationRun(db.Model):
    id = db.Column(db.Integer, primary_key=True,  nullable = False)
    run_no = db.Column(db.Integer, nullable = False)
    patient_no = db.Column(db.Integer, nullable = False)
-   time_spent_in_booking_q = db.Column(db.Float)
-   time_spent_while_booking = db.Column(db.Float)
-   time_spent_in_triage_q= db.Column(db.Float)
-   time_spent_while_triaging = db.Column(db.Float)
-   total_time_spent = db.Column(db.Float)
+   time_spent_in_booking_q = db.Column(db.Numeric)
+   time_spent_while_booking = db.Column(db.Numeric)
+   time_spent_in_triage_q= db.Column(db.Numeric)
+   time_spent_while_triaging = db.Column(db.Numeric)
+   total_time_spent = db.Column(db.Numeric)
    #defining foreign key
    qsimulation_id= db.Column(db.Integer, db.ForeignKey('que_simulation.id'))
    

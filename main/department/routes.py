@@ -1,7 +1,7 @@
 from flask import jsonify, request
+from simulation import EDQModel
 from . import department
 from models import db, Department, department_schema, departments_schema, Service, service_schema, services_schema, Simulation, simulation_schema, simulations_schema, QueSimulation, QueSimulationRun, que_simulation_run_schema, que_simulation_runs_schema, que_simulation_schema,que_simulations_schema
-
 #TODO: logic for simulation required in Que simulation
 #TODO: on adding/ deleting, return the whole list
 #TODO: do not need "add" for the "Que simulation " 
@@ -188,30 +188,101 @@ def get_que_simulation(simulation_id):
   return jsonify(list_que_simulations)
 
 #add q simulation
-@department.route('/simulation/<simulation_id>/que', methods =['POST'])
+@department.route('/simulation/<simulation_id>/que/', methods =['POST'])
 def add_que_simulation(simulation_id):
 
   warm_up_duration= request.json['warm_up_duration']
   total_duration = request.json['total_duration']
   patient_interval_time = request.json['patient_interval_time']
-  approx_triage_time = request.json['approx_triage_time']
-  approx_booking_time = request.json['approx_booking_time']
+  receptionist_booking_time = request.json['receptionist_booking_time']
+  nurse_triage_time = request.json['nurse_triage_time']
   receptionist_no = request.json['receptionist_no']
   triage_nurse_no = request.json['triage_nurse_no']
-  booking_iot_no = request.json['booking_iot_no']
-  triage_iot_no = request.json['triage_iot_no']
- 
+  iot_booking_time = 0.0
+  iot_triage_time = 0.0
+  booking_iot_no = 0.0
+  triage_iot_no = 0.0
+  total_runs_no = request.json['total_runs_no']
 
-  que_simulation = QueSimulation(warm_up_duration,total_duration, patient_interval_time,approx_triage_time,approx_booking_time,
-receptionist_no, triage_nurse_no,  booking_iot_no, triage_iot_no, simulation_id)
+  que_simulation = QueSimulation(warm_up_duration,total_duration,total_runs_no,
+  patient_interval_time,receptionist_no, receptionist_booking_time, triage_nurse_no, nurse_triage_time,
+    booking_iot_no, iot_booking_time, triage_iot_no,  iot_triage_time, simulation_id)
+
+ 
   # adding to db
   db.session.add(que_simulation)
   db.session.commit()
+
+  
+ #run the simulation for total_runs_no
+  for run in range(total_runs_no):
+    print("Run ", run + 1, " from ", total_runs_no, sep="")
+    #pass other values to emergency department que model
+    run_simu =  EDQModel(warm_up_duration,total_duration,run,
+    patient_interval_time,receptionist_no, receptionist_booking_time, triage_nurse_no, nurse_triage_time,
+    booking_iot_no, iot_booking_time, triage_iot_no,  iot_triage_time,simulation_id)
+    run_simu.run()
+    print()
+
   # fetch all the data from db
   all_que_simulations_of_a_simulation = QueSimulation.query.filter_by(simulation_id=simulation_id).all()
   list_que_simulations=que_simulations_schema.dump(all_que_simulations_of_a_simulation)
 
   return jsonify(list_que_simulations)
+
+
+
+
+
+#add q simulation
+@department.route('/simulation/<simulation_id>/que/digital', methods =['POST'])
+def add_que_simulation_for_digital(simulation_id):
+
+  warm_up_duration= request.json['warm_up_duration']
+  total_duration = request.json['total_duration']
+  patient_interval_time = request.json['patient_interval_time']
+  receptionist_booking_time = 0.0
+  nurse_triage_time = 0.0
+  receptionist_no = 0.0
+  triage_nurse_no = 0.0
+  iot_booking_time = request.json['iot_booking_time']
+  iot_triage_time = request.json['iot_triage_time']
+  booking_iot_no = request.json['booking_iot_no']
+  triage_iot_no = request.json['triage_iot_no']
+  total_runs_no = request.json['total_runs_no']
+
+  que_simulation = QueSimulation(warm_up_duration,total_duration,total_runs_no,
+  patient_interval_time,receptionist_no, receptionist_booking_time, triage_nurse_no, nurse_triage_time,
+    booking_iot_no, iot_booking_time, triage_iot_no,  iot_triage_time, simulation_id)
+
+ 
+  # adding to db
+  db.session.add(que_simulation)
+  db.session.commit()
+
+  
+ #run the simulation for total_runs_no
+  for run in range(total_runs_no):
+    print("Run ", run + 1, " from ", total_runs_no, sep="")
+    #pass other values to emergency department que model
+    run_simu =  EDQModel(warm_up_duration,total_duration,run,
+    patient_interval_time,receptionist_no, receptionist_booking_time, triage_nurse_no, nurse_triage_time,
+    booking_iot_no, iot_booking_time, triage_iot_no,  iot_triage_time,simulation_id)
+    run_simu.run()
+    print()
+
+
+
+  #fetch all the data from db
+  all_que_simulations_of_a_simulation = QueSimulation.query.filter_by(simulation_id=simulation_id).all()
+  list_que_simulations=que_simulations_schema.dump(all_que_simulations_of_a_simulation)
+
+  return jsonify(list_que_simulations)
+
+
+
+
+
 
 #Delete q simulation
 @department.route('/simulation/que/<id>', methods =['DELETE'])

@@ -1,17 +1,18 @@
 from main import app
 
-#TODO: rest api for service, simulation etc..
+#TODO: change the type back to float in the models to store float not numeric 
+
 
 
 
 
 
    
-#from app import db
+
+
+
+#from models import db
 #db.create_all()
-
-
-
 
 # run the app in dev mode
 if __name__ == "__main__":
