@@ -6,10 +6,8 @@ from models import db, QueSimulationRun
 
 
 
-# TODO warmup period
-# TODO record the data csv sql
-# TODO make sure the record data is correct
-# TODO extract edq into another module
+
+
 
 
 class EDQModel():

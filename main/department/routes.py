@@ -2,9 +2,7 @@ from flask import jsonify, request
 from simulation import EDQModel
 from . import department
 from models import db, Department, department_schema, departments_schema, Service, service_schema, services_schema, Simulation, simulation_schema, simulations_schema, QueSimulation, QueSimulationRun, que_simulation_run_schema, que_simulation_runs_schema, que_simulation_schema,que_simulations_schema
-#TODO: logic for simulation required in Que simulation
-#TODO: on adding/ deleting, return the whole list
-#TODO: do not need "add" for the "Que simulation " 
+
 
 
 
