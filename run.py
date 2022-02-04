@@ -14,8 +14,8 @@ from main import app
 
 
 
-from models import db
-db.create_all()
+#from models import db
+#db.create_all()
 
 # run the app in dev mode
 if __name__ == "__main__":
