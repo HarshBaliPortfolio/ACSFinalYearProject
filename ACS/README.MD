@@ -8,7 +8,9 @@
 - [Tutorial on how to install React.JS](https://www.freecodecamp.org/news/install-react-with-create-react-app/) Thank you Freecodecamp.org
 
 ## Load the project 
-- Load the [acs](/ACS/acs/) project on VScode. 
+- Load the contents of [acs](/ACS/acs/) folder on VScode. 
+- Now the project will be loaded.
+- Next configure the project
 
 
 ## Configuring Database connection
