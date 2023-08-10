@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-chartjs-3": "^2.7.7",
+    "react-icons": "^4.3.1"
+  }
+}

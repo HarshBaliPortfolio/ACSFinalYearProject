@@ -1,21 +1,16 @@
-from main import app
+from backend import app, db
+
+db.create_all()
+# 
+# To run the system
+# Pls Create a MYSQL database 
+# and link it with the project in  __init__ file in backend
 
 
 
-# TODO warmup period in **simulation module**
-    # TODO record the **input/output data** in csv file
-#TODO: in future might need bussiness logic for data visualisation
-    #TODO: update routes for visualisation
 
 
 
-
-   
-
-
-
-#from models import db
-#db.create_all()
 
 # run the app in dev mode
 if __name__ == "__main__":
