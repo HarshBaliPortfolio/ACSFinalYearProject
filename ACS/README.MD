@@ -7,12 +7,15 @@
 - [Node JS](https://nodejs.org/en)
 - [Tutorial on how to install React.JS](https://www.freecodecamp.org/news/install-react-with-create-react-app/) Thank you Freecodecamp.org
 
+## Load the project 
+- Load the [acs](ACS\acs) project on VScode. 
+
 
 ## Configuring Database connection
 1. Open the MySQL workbench.
 2. Create new schema and name is acsdb.
 
-![](/Images/createdb.png)
+![](/ACS/Images/createdb.png)
 
 
 3. Open VScode and then in acs folder select backend folder.
@@ -25,7 +28,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] ='mysql://root:@localhost/'
 
 6. You will need to add password that you input whilst setting up SQL and also the name of schema you just created.
 
-![](/Images/dbconfig.png)
+![](/ACS/Images/dbconfig.png)
 
 7. Save the file and now the MySQL schema is linked with the backend
 
@@ -35,7 +38,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] ='mysql://root:@localhost/'
 3. Select the option of _Run Python_ then select the option of  _Run Python file in terminal_.
 4. VScode's terminal window will pop up with the message showed in the imaage below:
 
-![](/Images/BackEndRunning.png)
+![](/ACS/Images/BackEndRunning.png)
 
 5. Now the backend is up and runing and time to run frontend. 
 
@@ -43,13 +46,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] ='mysql://root:@localhost/'
 ## Running Front-end
 1. You will need to ppen a new terminal in VScode and you can open it by:
 
-![](/Images/OpenAnotherTerminal.png)
+![](/ACS/Images/OpenAnotherTerminal.png)
 
 2. In the new terminal, at first you will need to change to Frontend folder and you can do by using _cd_ command. 
 3. Then use command _npm start_ to run the frontend and it wil look something like this:
 
-![](/Images/RunFrontEnd.png)
+![](/ACS/Images/RunFrontEnd.png)
 
 4. At last your default browser window will pop up and you can now use ACS.
 
-![](/Images/popup.png)
+![](/ACS/Images/popup.png)
